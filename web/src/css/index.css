@@ -2,7 +2,7 @@ body {
     /* background: red;
     color: blue; */
 
-    background: #232;
+    background: #353;
     color: #eee;
     margin: 0;
     padding: 0;
@@ -16,7 +16,20 @@ body {
     margin: 0;
     width: 100vw;
     display: block;
-    background: #121;
+    background: #232;
+}
+
+#back-btn {
+    position: fixed;
+    top: 3vw;
+    left: 4vw;
+    background: #0000;
+    color: #fff;
+    border: none;
+    font-size: 3vw;
+    padding: 1vw 2vw;
+    margin: 0;
+    z-index: 99999;
 }
 
 #footer {
@@ -31,14 +44,14 @@ body {
 
 #footer > button {
     flex: 1;
-    background: #fff;
+    background: #ded;
     color: #121;
     border: #121 1px solid;
     transition: background 0.3s, color 0.3s;
     font-size: 7vw;
 }
 
-#footer > button:hover, #footer > button.active {
+#footer > button:hover, #footer > button:active {
     background: #bbb;
 }
 
@@ -46,8 +59,94 @@ body {
     font-size: 9vw !important;
 }
 
-#map > img {
-    max-width: 100vw;
+#map {
+    padding-top: 100vw;
+    display: block;
+    margin: auto;
+    width: 90vw;
     text-align: center;
-    /* max-height: 70vw; */
+}
+
+.home-content {
+    text-align: left;
+}
+
+#map > img {
+    margin: auto;
+    aspect-ratio: 1/1;
+    width: 90vw;
+    text-align: center;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+
+    position: absolute;
+    left: 5vw;
+    top: 22vw;
+}
+
+div.marker {
+    width: 2.5vw;
+    height: 2.5vw;
+    position: absolute;
+    display: block;
+    z-index: 99999;
+    border-radius: 100%;
+
+    top: 0;
+    left: 0;
+}
+div.marker#robot {
+    display: none;
+    background: #adf;
+}
+
+div.marker.healthy {
+    background: #183;
+    width: 2vw;
+    height: 2vw;
+}
+
+div.marker.unhealthy {
+    background: #c33;
+    width: 2vw;
+    height: 2vw;
+}
+
+div.marker.pulse {
+    animation: pulse 0.7s infinite alternate 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%   {
+        filter: contrast(0.1);
+    }
+    50%  {
+        filter: brightness(1);
+        filter: contrast(10);
+    }
+    99% {
+        filter: contrast(0.1);
+    }
+}
+
+#settings {
+    padding: 8vw;
+}
+
+.setting {
+    padding-bottom: 2vw;
+}
+
+.setting > label {
+    /* font-size: 5vw;
+    display: block;
+    margin: 0;
+    padding: 0; */
+    padding-right: 2vw;
+}
+
+#duration {
+    display: inline-block;
+    max-width: 20vw;
+    margin-right: 2vw;
 }

@@ -8,7 +8,7 @@ module.exports = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     entry: './src/index.tsx',
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, '..', 'server',  'dist'),
         filename: 'bundle.js',
     },
     devtool: 'source-map',
@@ -31,7 +31,7 @@ module.exports = {
                 use: [MiniCssExtractPlugin.loader, 'css-loader'],
             },
             {
-                test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                test: /\.(png|svg|jpg|jpeg|gif|webp)$/i,
                 type: 'asset/resource',
             },
         ],
@@ -48,8 +48,13 @@ module.exports = {
         }),
     ],
     devServer: {
-        static: './dist',
+        static: '../server/dist',
         compress: true,
         port: 9000,
+        proxy: [{
+            context: url => !url.includes('/ws'), // So that it doesn't conflict with WDS's own websocket server
+            target: 'http://localhost:13579',
+            ws: true,
+        }],    
     },
 };

@@ -1,14 +1,14 @@
 import JSX from "jsxlite"
 import { icon, library } from "@fortawesome/fontawesome-svg-core"
-import { faExclamationCircle, faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faExclamationCircle, faXmark, faLocationDot } from "@fortawesome/free-solid-svg-icons"
 
 import 'css/notif.css'
+import { MapFrame, replaceContent } from "navigation"
 
-library.add(faExclamationCircle, faXmark)
+library.add(faExclamationCircle, faXmark, faLocationDot)
 const notifIcon = icon({ prefix: 'fas', iconName: 'exclamation-circle' })
 const closeIcon = icon({ prefix: 'fas', iconName: 'xmark' })
-
-console.log(closeIcon.html)
+const mapIcon = icon({ prefix: 'fas', iconName: 'location-dot' })
 
 export type NotificationItemProps = {
     title: string,
@@ -41,9 +41,21 @@ export const NotificationItem = ({ title, body, image, detectionTime, detectionL
             }, 500)
         }
 
+        const location_clicked = () => {
+            console.log('Location clicked')
+            removeExpanded()
+            replaceContent(<MapFrame />)
+
+            const marker = document.querySelector(`.marker.unhealthy[data-x="${detectionLocation[0]}"][data-y="${detectionLocation[1]}"]`) as HTMLDivElement
+            if (!marker) return
+
+            marker.classList.add('pulse')
+            setTimeout(() => marker.classList.remove('pulse'), 10000)
+        }
+
         expanded = (
             <div class="notif-expanded-container" onclick={removeExpanded}>
-                <button class="notif-expanded-close-btn" innerHTML={closeIcon.html[0]} />
+                {/* <button class="notif-expanded-close-btn" innerHTML={closeIcon.html[0]} /> */}
                 <div class="notif-expanded" onclick={e => e.stopPropagation() }>
                     <div class="notif-expanded-header">
                         <div class="notif-icon" innerHTML={notifIcon.html[0]} />
@@ -51,7 +63,11 @@ export const NotificationItem = ({ title, body, image, detectionTime, detectionL
                     </div>
                     <p class="notif-expanded-body">{body}</p>
                     <p class="notif-expanded-time">{detectionTime.toLocaleString()}</p>
-                    <p class="notif-expanded-location">{detectionLocation[0] + ''}, {detectionLocation[1] + ''}</p>
+                    <button class="notif-expanded-location-container" onclick={location_clicked}>
+                        <div class="notif-expanded-location-icon" innerHTML={mapIcon.html[0]}></div>
+                        {/* <p class="notif-expanded-location">{`( ${detectionLocation[0]}, ${detectionLocation[1]})`}</p> */}
+                        <p class="notif-expanded-location">{`Open map`}</p>
+                        </button>
                 </div>
             </div>
         )
@@ -62,14 +78,15 @@ export const NotificationItem = ({ title, body, image, detectionTime, detectionL
 
     return (
         <div class="notif" onclick={onclick}>
-            <div class="notif-header">
-                <div class="notif-icon" innerHTML={notifIcon.html[0]} />
-                <h3 class="notif-title">Disease detected</h3>
-            </div>
-
             <img class="notif-image" src={image} />
+            <div class="notif-content">
+                <div class="notif-header">
+                    <div class="notif-icon" innerHTML={notifIcon.html[0]} />
+                    <h3 class="notif-title">Disease detected</h3>
+                </div>
 
-            <p class="notif-expand-text">Click for more information</p>
+                <p class="notif-expand-text">Click for more information</p>
+            </div>
         </div>
     )
 }
